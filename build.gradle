@@ -13,10 +13,26 @@ repositories {
 
 
 jacoco {
-    toolVersion = "0.8.6"
+    toolVersion = "0.8.4"
     reportsDir = file("$buildDir/reports")
 }
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+tasks.create("tcJacoco") {
+    doLast {
+        file("jacocoReport").mkdirs()
+        println([
+                "##teamcity[jacocoReport",
+                "dataPath='build/jacoco/test.exec'",
+                "sources='src/main'",
+                "classpath='+:build/classes/kotlin/main/**'",
+                "]"
+        ].join(" "))
+    }
+}
+
+tasks.findByName("test").finalizedBy("tcJacoco")

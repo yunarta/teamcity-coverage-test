@@ -1,6 +1,6 @@
 class TargetClass {
 
     fun method() {
-        println()
+        println("method")
     }
 }
